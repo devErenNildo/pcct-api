@@ -47,7 +47,7 @@ const postUser = async (req, res) => {
         const {name, user} = req.body;
         const file = req.file;
 
-        const picture = new FundoPictures({
+        const picture = new PostPictures({
             user: user,
             name: name,
             src: file.path
@@ -62,6 +62,19 @@ const postUser = async (req, res) => {
     }
 }
 
+const imageAvatar = async (req, res) => {
+    const img = req.params.img
+    const image = await AvatarPicture.findById(img);
+
+    if(image){
+        // res.send(image);
+        const file = await fs.readFile(image.src);
+        res.send(file);
+    } else{
+        res.send("não");
+    }
+}
 
 
-export { avatarUser, fundoUser, postUser }
+
+export { avatarUser, fundoUser, postUser, imageAvatar }

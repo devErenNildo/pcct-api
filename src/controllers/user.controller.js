@@ -2,28 +2,32 @@ import { createUser, findAllService, findByIdService, updateService } from "../s
 
 const create = async (req, res) => {
     const { name, username, email, password, avatar, background } = req.body;
-
-    if(!name || !username || !email || !password || !avatar || !background){
-        res.status(400).send({ message: "Campos incompletos"});
-    }
-
-    const user = await createUser(req.body);
-
-    if(!user){
-        return res.status(400).send({ message: 'Erro ao criar o usuário'});
-    }
-
-    res.status(200).send({
-        message: "Usuário criado com sucesso",
-        user: {
-            id: user._id,
-            name,
-            username,
-            email,
-            avatar,
-            background
+    try {
+        if(!name || !username || !email || !password ){
+            return res.status(400).send({ message: "Campos incompletos"});
         }
-    });
+    
+        const user = await createUser(req.body);
+    
+        if(!user){
+            return res.status(400).send({ message: 'Erro ao criar o usuário'});
+        }
+    
+        res.status(200).send({
+            message: "Usuário criado com sucesso",
+            user: {
+                id: user._id,
+                name,
+                username,
+                email,
+                avatar,
+                background
+            }
+        });        
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+
 }
 
 const findAll = async (req, res) => {

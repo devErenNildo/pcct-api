@@ -2,7 +2,7 @@ import Post from "../models/Post.js";
 
 const createdService = (body) => Post.create(body);
 
-const findAllService = (offset, limit) => Post.find().sort({_id: -1}).skip(offset).limit(limit).populate("user");
+const findAllService = () => Post.find().sort({_id: -1}).populate('user');
 
 const countNews = () => Post.countDocuments();
 

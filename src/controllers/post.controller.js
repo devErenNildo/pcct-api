@@ -28,50 +28,9 @@ const created = async (req, res) => {
 
 const findAll = async (req, res) => {
 
-    let { limit, offset } = req.query;
+    const posts = await findAllService();
 
-    limit = Number(limit);
-    offset = Number(offset);
-
-    if(!limit){
-        limit = 5;
-    }
-
-    if(!offset){
-        offset = 0;
-    }
-
-    const posts = await findAllService(offset, limit);
-    const total = await countNews();
-    const currentUrl = req.baseUrl;
-
-    const next = offset+limit;
-    const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null;
-    const previus = offset - limit < 0 ? null : offset - limit;
-    const previusUrl = previus != null ? `${currentUrl}?limit=${limit}&offset=${previus}` : null;
-
-
-    if(posts.length === 0){
-        return res.status(400).send({ msg: 'Não há nenhum post feito'});
-    }
-
-    res.send({
-        nextUrl,
-        previusUrl,
-        limit,
-        offset,
-        total,
-        results: posts.map(item => ({
-            id: item._id,
-            title: item.title,
-            text : item.text,
-            banner: item.banner,
-            likes: item.likes,
-            comments: item.comments,
-            name: item.user.username,
-            avatar: item.user.avatar
-        }))
-    });
+    res.send(posts);
 }
 
 export { created, findAll }

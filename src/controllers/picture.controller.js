@@ -1,8 +1,10 @@
 import AvatarPicture from "../models/AvatarPictures.js";
 import FundoPictures from "../models/FundoPictures.js";
 import PostPictures from "../models/PostPictures.js";
+import { getUsers } from "../services/picture.service.js";
 
 const avatarUser = async (req, res) => {
+    // res.send(req.file);
     try {
         const {name, user} = req.body;
         const file = req.file;
@@ -73,8 +75,16 @@ const imageAvatar = async (req, res) => {
     } else{
         res.send("não");
     }
+
+    const getAvatar = async () => {
+
+    }
+}
+
+const getImage = async (req, res) => {
+    const images = await AvatarPicture.find();
+    res.send(images)
 }
 
 
-
-export { avatarUser, fundoUser, postUser, imageAvatar }
+export { avatarUser, fundoUser, postUser, imageAvatar, getImage }

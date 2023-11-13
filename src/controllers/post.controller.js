@@ -1,22 +1,23 @@
-import { createdService, findAllService, countNews } from "../services/post.service.js";
+import { createdService, findAllService, countNews, likePostService, deleteLikePostService } from "../services/post.service.js";
 import { ObjectId } from "mongoose";
 
 const created = async (req, res) => {
     try{
 
-        const { title, banner, text } = req.body;
+        const { user, title, text } = req.body;
+        const file = req.file;
 
-        if(!title || !banner || !text) {
+        if(!user || !title || !text) {
             return res.status(400).send({
                 message: "Submeta todos os campos da publicação"
             });
         }
 
         await createdService({
+            user,
+            src: file.path,
             title,
-            banner,
-            text,
-            user: req.userId
+            text
         });
 
         res.status(200).send({message: "publicaçaõ feita com sucesso"});
@@ -33,4 +34,18 @@ const findAll = async (req, res) => {
     res.send(posts);
 }
 
-export { created, findAll }
+const addLikePost = async (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    const addLike = await likePostService(id, userId);
+
+    if(!addLike){
+        await deleteLikePostService(id, userId);
+        return res.status(200).send({ msg: 'like removido'});
+    }
+
+    res.status(200).send({ msg: 'like adicionado'});
+}
+
+export { created, findAll, addLikePost }

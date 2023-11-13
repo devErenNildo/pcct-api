@@ -1,13 +1,13 @@
 import AvatarPicture from "../models/AvatarPictures.js";
 import FundoPictures from "../models/FundoPictures.js";
 import PostPictures from "../models/PostPictures.js";
-import { getUsers } from "../services/picture.service.js";
+import { getAllPostsImage, createPostService } from "../services/picturePost.service.js";
 
 const avatarUser = async (req, res) => {
-    // res.send(req.file);
     try {
-        const {name, user} = req.body;
+        const {name, userName, email, password} = req.body;
         const file = req.file;
+        // const fundo = req.file;
 
         const picture = new AvatarPicture({
             user: user,
@@ -44,40 +44,31 @@ const fundoUser = async (req, res) => {
     }
 }
 
-const postUser = async (req, res) => {
+const createPost = async (req, res) => {
     try {
-        const {name, user} = req.body;
+        const {user, title, text} = req.body;
         const file = req.file;
 
-        const picture = new PostPictures({
-            user: user,
-            name: name,
-            src: file.path
+        if( !user || !title || !text){
+            return res.status(400).send({
+                msg: "Submeta todos os campos da publicação"
+            });
+        }
+
+        await createPostService({
+            user,
+            src: file.path,
+            title,
+            text
         });
 
-        await picture.save();
-
-        res.json({picture, msg: "Imagem salva com sucesso"});
+        res.status(200).send({
+            msg: "Publicação realizada com sucesso"
+        });
 
     } catch (error) {
-        res.status(500).json({message: "Erro ao salvar imagem"});
-    }
-}
-
-const imageAvatar = async (req, res) => {
-    const img = req.params.img
-    const image = await AvatarPicture.findById(img);
-
-    if(image){
-        // res.send(image);
-        const file = await fs.readFile(image.src);
-        res.send(file);
-    } else{
-        res.send("não");
-    }
-
-    const getAvatar = async () => {
-
+        res.status(500).json({message: "Erro ao realizar a publicação"});
+        console.log(error);
     }
 }
 
@@ -86,5 +77,10 @@ const getImage = async (req, res) => {
     res.send(images)
 }
 
+const getPost = async (req, res) => {
+    const response = await getAllPostsImage();
+    res.send(response);
+}
 
-export { avatarUser, fundoUser, postUser, imageAvatar, getImage }
+
+export { avatarUser, fundoUser, createPost, getImage, getPost }

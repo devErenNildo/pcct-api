@@ -6,7 +6,7 @@ const PostSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    banner: {
+    src: {
         type: String,
         required: true,
     },

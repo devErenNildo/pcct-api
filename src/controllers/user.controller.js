@@ -1,13 +1,24 @@
 import { createUser, findAllService, findByIdService, updateService } from "../services/user.service.js";
 
 const create = async (req, res) => {
-    const { name, username, email, password, avatar, background } = req.body;
     try {
-        if(!name || !username || !email || !password ){
+        const { name, username, email, password, turma } = req.body;
+        const file = req.file;
+
+
+        if(!name || !username || !email || !password || !turma ){
             return res.status(400).send({ message: "Campos incompletos"});
         }
     
-        const user = await createUser(req.body);
+        const user = await createUser({
+            name,
+            username,
+            email,
+            password,
+            turma,
+            avatarSrc: file.path
+
+        });
     
         if(!user){
             return res.status(400).send({ message: 'Erro ao criar o usuário'});
@@ -19,9 +30,7 @@ const create = async (req, res) => {
                 id: user._id,
                 name,
                 username,
-                email,
-                avatar,
-                background
+                email
             }
         });        
     } catch (error) {

@@ -1,4 +1,4 @@
-import { createdService, findAllService, countNews, likePostService, deleteLikePostService } from "../services/post.service.js";
+import { createdService, findAllService, likePostService, deleteLikePostService, commentPostService, deletePostService, byUserService } from "../services/post.service.js";
 import { ObjectId } from "mongoose";
 
 const created = async (req, res) => {
@@ -34,6 +34,31 @@ const findAll = async (req, res) => {
     res.send(posts);
 }
 
+const byUser = async (req, res) => {
+    try {
+        
+        const { id } = req.params;
+        const news = await byUserService(id);
+        return res.send(news);
+
+    } catch (error) {
+        res.status(500).send({ msg: error.message})
+    }
+}
+
+const deletePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+    
+
+        await deletePostService(id);
+
+        return res.send({ msg: 'Post deletado com sucesso'});
+    } catch (error) {
+        res.status(500).send({ msg: error.message});
+    }
+}
+
 const addLikePost = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.body;
@@ -48,4 +73,18 @@ const addLikePost = async (req, res) => {
     res.status(200).send({ msg: 'like adicionado'});
 }
 
-export { created, findAll, addLikePost }
+const addCommentPost = async (req, res) => {
+    const { id } = req.params;
+    const { userId, comment } = req.body;
+
+    if(!comment){
+        return res.status(400).send({ msg: 'escreva um comentário'});
+
+    }
+
+    await commentPostService(id, comment, userId)
+    
+    res.send({ msg: 'comentário adicionado'});
+}
+
+export { created, findAll, addLikePost, addCommentPost, deletePost, byUser }

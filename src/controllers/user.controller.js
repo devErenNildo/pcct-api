@@ -2,7 +2,7 @@ import { createUser, findAllService, findByIdService, updateService } from "../s
 
 const create = async (req, res) => {
     try {
-        const { name, username, email, password, turma } = req.body;
+        const { name, username, email, password, turma, servidor } = req.body;
         const file = req.file;
 
 
@@ -16,8 +16,8 @@ const create = async (req, res) => {
             email,
             password,
             turma,
-            avatarSrc: file.path
-
+            avatarSrc: file.path,
+            servidor
         });
     
         if(!user){
@@ -50,9 +50,7 @@ const findAll = async (req, res) => {
 }
 
 const findById = async (req, res) => {
-    const id = req.userId;
-
-    console.log(id);
+    const { id } = req.params;
     const user = await findByIdService(id);
 
     res.send(user);

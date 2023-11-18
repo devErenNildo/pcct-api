@@ -33,7 +33,7 @@ const avisoCreate = async (req, res) => {
             turma
         });
 
-        res.status(200).send('ok');
+        res.status(200).send({ msg: "aviso publicado"});
 
     } catch (e) {
         res.status(500).send(e.message);

@@ -38,7 +38,7 @@ const deleteLikePostService = (idPost, userId) => Post.findOneAndUpdate(
 
 const deletePostService = (id) => Post.findOneAndDelete({ _id: id});
 
-const commentPostService = (idPost, comment, userId) => {
+const commentPostService = (idPost, comment, userId, username, src) => {
     let idComment = Math.floor( Date.now() * Math.random()).toString(36);
 
     return Post.findOneAndUpdate(
@@ -51,6 +51,8 @@ const commentPostService = (idPost, comment, userId) => {
                     idComment,
                     userId,
                     comment,
+                    username,
+                    src,
                     createdAt: new Date()
                 }
             }

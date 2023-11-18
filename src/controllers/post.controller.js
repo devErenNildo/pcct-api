@@ -75,14 +75,14 @@ const addLikePost = async (req, res) => {
 
 const addCommentPost = async (req, res) => {
     const { id } = req.params;
-    const { userId, comment } = req.body;
+    const { userId, comment, username, src } = req.body;
 
     if(!comment){
         return res.status(400).send({ msg: 'escreva um comentário'});
 
     }
 
-    await commentPostService(id, comment, userId)
+    await commentPostService(id, comment, userId, username, src)
     
     res.send({ msg: 'comentário adicionado'});
 }

@@ -29,6 +29,10 @@ const UserSchema = new mongoose.Schema({
     avatarSrc: {
         type: String,
         required: true,
+    },
+    servidor: {
+        type: Boolean,
+        required: true
     }
 });
 

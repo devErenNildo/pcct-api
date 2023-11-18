@@ -8,7 +8,7 @@ const userRouter = Router();
 
 userRouter.post('/', upload.single("file"), create);
 userRouter.get('/', findAll);
-userRouter.get('/id', authMiddleware, findById);
+userRouter.get('/:id', findById);
 userRouter.patch('/:id', upDate);
 
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import conectDataBase from './src/database/db.js';
+import conectDataBase from './database/db.js';
 import dotenv from 'dotenv'
 import path from 'path';
 dotenv.config();
@@ -7,11 +7,11 @@ dotenv.config();
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-import userRouter from './src/routes/user.route.js';
-import authRouter from './src/routes/auth.route.js';
-import postRouter from './src/routes/post.route.js';
-import avisoRoute from './src/routes/aviso.route.js';
-import pictureRouter from './src/routes/picture.route.js';
+import userRouter from './routes/user.route.js';
+import authRouter from './routes/auth.route.js';
+import postRouter from './routes/post.route.js';
+import avisoRoute from './routes/aviso.route.js';
+import pictureRouter from './routes/picture.route.js';
 
 const app = express();
 const port = process.env.PORT || 8080;
